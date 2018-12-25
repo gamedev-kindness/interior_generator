@@ -11,6 +11,8 @@ var rnd
 var growth_small = growth * 0.1
 var shrink = growth * 0.5
 var outside_walls
+var ov
+var colliders = []
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -36,7 +38,9 @@ enum {
 	STATE_DONE
 }
 var state = STATE_INIT
-func check_shape(points):
+func check_shape(points, xform = null):
+	if xform == null:
+		xform = global_transform
 	var space = get_world_2d().get_direct_space_state()
 	var shape = Physics2DShapeQueryParameters.new()
 	var shape_data = ConcavePolygonShape2D.new()
@@ -44,7 +48,7 @@ func check_shape(points):
 	shape.set_shape(shape_data)
 	shape.collision_layer = 1
 	shape.collide_with_areas = true
-	shape.transform = global_transform
+	shape.transform = xform
 	shape.margin = 0.2
 	var result = space.intersect_shape(shape, 32)
 	var ret = true
@@ -52,11 +56,43 @@ func check_shape(points):
 		if k.collider != outside_walls:
 			ret = false
 	return ret
+func get_collider():
+	return $Area2D
+func get_shape():
+	return $Area2D/CollisionPolygon2D
+func is_colliding():
+	for h in colliders:
+		print(h)
+		return true
+	return false
+func is_colliding_with(a):
+	for h in colliders:
+		print(h)
+		if h == a:
+			return true
+	return false
+func is_anything_collides_me():
+	if is_colliding():
+		return true
+	var rooms = get_tree().get_nodes_in_group("rooms")
+	for r in rooms:
+		if r == self:
+			continue
+		elif !r.is_colliding():
+			continue
+		elif r.is_colliding_with(get_collider()):
+			return true
+		elif !r.check_shape(get_shape().polygon, global_transform):
+			return true
+	return false
 func room_is_valid():
 	var space = get_world_2d().get_direct_space_state()
 	var shape = Physics2DShapeQueryParameters.new()
 	var shape_data = ConcavePolygonShape2D.new()
 	var shape_points = []
+	aabb = Rect2()
+	for k in get_points():
+		aabb = aabb.expand(k)
 	if aabb.get_area() > max_area:
 		return false
 	for k in get_points():
@@ -132,14 +168,14 @@ func grow_rect(t):
 	return room_is_valid()
 func get_area():
 	return aabb.get_area()
-func _ready():
+func _ready2():
 	aabb = Rect2()
 	for k in get_points():
 		aabb = aabb.expand(k)
 	add_to_group("zones")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process2(delta):
 	aabb = Rect2()
 	for k in get_points():
 		aabb = aabb.expand(k)
@@ -239,3 +275,36 @@ func _process(delta):
 				state = STATE_DONE
 			print("complete")
 	
+
+func add_collider_area(a):
+	if a != outside_walls:
+		print("added ", a)
+		colliders.push_back(a)
+
+func remove_collider_area(a):
+	if a != outside_walls:
+		print("remove ", a)
+		colliders.erase(a)
+
+func _ready():
+	state = 0
+	$Area2D.collision_layer = 2
+	$Area2D.collision_mask = 3
+	$Area2D.connect("area_entered", self, "add_collider_area")
+	$Area2D.connect("area_exited", self, "remove_collider_area")
+func _process(delta):
+	if colliders.size() > 0:
+		print(colliders.size())
+	aabb = Rect2()
+	for k in get_points():
+		aabb = aabb.expand(k)
+	ov = $Area2D.get_overlapping_areas()
+	var states = $states.get_children()
+	var cur = states[state]
+	var next_name = cur.run(self)
+	if next_name != null && next_name.length() > 0:
+		for p in range(states.size()):
+			if states[p].name == next_name:
+				state = p
+				break
+		

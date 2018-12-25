@@ -12,13 +12,6 @@ func _ready():
 #func _process(delta):
 #	pass
 func run(obj):
-	var ok = true
-	if obj.ov.size() > 0:
-		for h in obj.ov:
-			if h != obj.outside_walls:
-				ok = false
-		if ok:
-			return "grow_uniform"
-		else:
-			obj.queue_free()
-
+	return "next"
+func init(obj):
+	pass

@@ -1,0 +1,74 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://building_generator/outside_walls/zones/zone.gd" type="Script" id=1]
+[ext_resource path="res://building_generator/outside_walls/zones/states/init.gd" type="Script" id=2]
+[ext_resource path="res://building_generator/outside_walls/zones/states/grow_uniform.gd" type="Script" id=3]
+[ext_resource path="res://building_generator/outside_walls/zones/states/shrink_uniform.gd" type="Script" id=4]
+[ext_resource path="res://building_generator/outside_walls/zones/control/repeat.gd" type="Script" id=5]
+[ext_resource path="res://building_generator/outside_walls/zones/states/grow_sides.gd" type="Script" id=6]
+[ext_resource path="res://building_generator/outside_walls/zones/states/grow_rect.gd" type="Script" id=7]
+
+[node name="zone" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="poly" type="Polygon2D" parent="."]
+polygon = PoolVector2Array( -1, -1, 0, -1, 1, -1, 1, 0, 1, 1, 0, 1, -1, 1, -1, 0 )
+color = Color( 0.678431, 0.0745098, 0.0745098, 1 )
+
+[node name="states" type="Node" parent="."]
+
+[node name="init" type="Node" parent="states"]
+script = ExtResource( 2 )
+
+[node name="grow_uniform" type="Node" parent="states"]
+script = ExtResource( 3 )
+
+[node name="shrink_uniform" type="Node" parent="states"]
+script = ExtResource( 4 )
+
+[node name="repeat" type="Node" parent="states"]
+script = ExtResource( 5 )
+repeat = 20
+
+[node name="grow_sides" type="Node" parent="states/repeat"]
+script = ExtResource( 6 )
+current_dim = 0
+
+[node name="shrink_uniform4" type="Node" parent="states/repeat"]
+script = ExtResource( 4 )
+
+[node name="grow_sides2" type="Node" parent="states/repeat"]
+script = ExtResource( 6 )
+current_dim = 1
+
+[node name="shrink_uniform5" type="Node" parent="states/repeat"]
+script = ExtResource( 4 )
+
+[node name="grow_sides3" type="Node" parent="states/repeat"]
+script = ExtResource( 6 )
+current_dim = 2
+
+[node name="shrink_uniform6" type="Node" parent="states/repeat"]
+script = ExtResource( 4 )
+
+[node name="grow_sides4" type="Node" parent="states/repeat"]
+script = ExtResource( 6 )
+current_dim = 3
+
+[node name="shrink_uniform7" type="Node" parent="states/repeat"]
+script = ExtResource( 4 )
+
+[node name="grow_rect" type="Node" parent="states"]
+script = ExtResource( 7 )
+current_dim = 0
+
+[node name="shrink_uniform2" type="Node" parent="states"]
+script = ExtResource( 4 )
+
+[node name="grow_rect2" type="Node" parent="states"]
+script = ExtResource( 7 )
+current_dim = 1
+
+[node name="shrink_uniform3" type="Node" parent="states"]
+script = ExtResource( 4 )
+
