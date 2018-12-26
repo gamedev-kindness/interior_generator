@@ -28,7 +28,7 @@ script = ExtResource( 4 )
 
 [node name="repeat" type="Node" parent="states"]
 script = ExtResource( 5 )
-repeat = 20
+repeat = 2
 
 [node name="grow_sides" type="Node" parent="states/repeat"]
 script = ExtResource( 6 )

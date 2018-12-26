@@ -8,7 +8,16 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Node",
+"class": "ZoneState",
+"language": "GDScript",
+"path": "res://building_generator/outside_walls/zones/states/zone_script.gd"
+} ]
 _global_script_class_icons={
-
+"ZoneState": ""
 }
+
+[application]
+
+run/main_scene="res://building_generator/outside_walls/outside_walls.tscn"
