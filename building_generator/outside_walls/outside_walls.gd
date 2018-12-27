@@ -10,6 +10,11 @@ var rnd
 var aabb
 var budget
 var segment_shapes = []
+var zone_types = []
+func sort_zone_types(a, b):
+	if a.probability < b.probability:
+		return true
+	return false
 func _ready():
 	shape = ConcavePolygonShape2D.new()
 	shape.segments = $poly.polygon
@@ -27,6 +32,17 @@ func _ready():
 		seg_shape.a = segment[0]
 		seg_shape.b = segment[1]
 		segment_shapes.push_back(seg_shape)
+	var score = 0.0
+	for m in $room_types.get_children():
+		score += m.probability
+	for m in $room_types.get_children():
+		m.probability = m.probability / score
+	score = 0.0
+	for m in $room_types.get_children():
+		score += m.probability
+		m.probability = score
+		zone_types.push_back(m)
+	zone_types.sort_custom(self, "sort_zone_types")
 
 var state = 0
 func _process(delta):

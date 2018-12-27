@@ -25,6 +25,7 @@ func run(obj):
 			w.position = current_pos
 			w.rotation = seg_vector.angle()
 			current_pos += seg_vector.normalized() * window_space
+			w.add_to_group("windows")
 	return "next"
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

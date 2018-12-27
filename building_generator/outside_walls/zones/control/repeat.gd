@@ -1,10 +1,5 @@
 extends Node
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 var state = 0
@@ -26,7 +21,7 @@ func run(obj):
 		else:
 			state = 0
 			repeat -= 1
-			print("again ", get_children()[state].name)
+#			print("again ", get_children()[state].name)
 			get_children()[state].init(obj)
 	elif next == "next":
 		get_children()[state].init(obj)

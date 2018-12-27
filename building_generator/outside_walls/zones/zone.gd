@@ -11,6 +11,10 @@ var outside_walls
 var outside_walls_segments
 var outside_walls_xform
 var rnd
+var probability = 0.0
+var grow_probability = 0.0
+var min_area = 0.0
+var max_area = 0.0
 func update_shape():
 	$poly.polygon = shape.segments
 	tris = Geometry.triangulate_polygon(shape.segments)
