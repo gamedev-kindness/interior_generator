@@ -11,19 +11,17 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
-enum {GROW, CHECK, COMPLETE}
-var state = CHECK
-export var current_dim = -1
+enum {GROW, COMPLETE}
+var state = GROW
+export var amount = 0.07
+var current_dim = 0
+var results = [true, true, true, true]
 func run(obj):
 	var tris = obj.tris
-	if state == CHECK:
-		var ok = !check_shape_collision(obj)
-		if ok:
-			state = GROW
-		else:
-			state = COMPLETE
-	elif state == GROW:
+	if state == GROW:
 		if obj.rnd.randf() < obj.grow_probability:
+			current_dim = obj.rnd.randi() % 4
+			print("dim: ", current_dim)
 			var poly = []
 			var max_length = 0.0
 			for k in obj.shape.segments:
@@ -33,31 +31,40 @@ func run(obj):
 				for k in obj.shape.segments:
 					var vec = k
 					if k.x < -0.01:
-						vec = Vector2(k.x * (max_length + 0.1) / max_length, k.y)
+						vec = Vector2(k.x * (max_length + amount) / max_length, k.y)
 					poly.push_back(vec)
 			elif current_dim == 1:
 				for k in obj.shape.segments:
 					var vec = k
 					if k.x > 0.01:
-						vec = Vector2(k.x * (max_length + 0.1) / max_length, k.y)
+						vec = Vector2(k.x * (max_length + amount) / max_length, k.y)
 					poly.push_back(vec)
 			elif current_dim == 2:
 				for k in obj.shape.segments:
 					var vec = k
 					if k.y < -0.01:
-						vec = Vector2(k.x, k.y * (max_length + 0.1) / max_length)
+						vec = Vector2(k.x, k.y * (max_length + amount) / max_length)
 					poly.push_back(vec)
 			elif current_dim == 3:
 				for k in obj.shape.segments:
 					var vec = k
 					if k.y > 0.01:
-						vec = Vector2(k.x, k.y * (max_length + 0.1) / max_length)
+						vec = Vector2(k.x, k.y * (max_length + amount) / max_length)
 					poly.push_back(vec)
-			obj.shape.segments = poly
-			obj.update_shape()
-			state = CHECK
+			if check_polygon(obj, poly, obj.global_transform):
+				obj.shape.segments = poly
+				obj.update_shape()
+				results[current_dim] = true
+			else:
+				results[current_dim] = false
+				state = COMPLETE
+				for h in results:
+					if h == true:
+						state = GROW
+						break						
 	elif state == COMPLETE:
-		state = CHECK
+		state = GROW
 		return "next"
 func init(obj):
-	state = CHECK
+	state = GROW
+	results = [true, true, true, true]

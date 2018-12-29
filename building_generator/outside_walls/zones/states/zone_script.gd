@@ -24,7 +24,7 @@ func create_convex_shapes(shape: Shape2D) -> Array:
 	for h in range(0, tris.size(), 3):
 		var poly = []
 		for l in range(3):
-			poly.push_back(shape.segments[h + l])
+			poly.push_back(shape.segments[tris[h + l]])
 		var convex_shape = ConvexPolygonShape2D.new()
 		convex_shape.points = poly
 		shapes.push_back(convex_shape)

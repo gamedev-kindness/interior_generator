@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://building_generator/outside_walls/outside_walls.gd" type="Script" id=1]
 [ext_resource path="res://building_generator/outside_walls/states/init.gd" type="Script" id=2]
@@ -6,6 +6,11 @@
 [ext_resource path="res://building_generator/outside_walls/states/zones.gd" type="Script" id=4]
 [ext_resource path="res://building_generator/outside_walls/states/grow.gd" type="Script" id=5]
 [ext_resource path="res://building_generator/outside_walls/zones/zone_types/room_type.tscn" type="PackedScene" id=6]
+[ext_resource path="res://building_generator/outside_walls/grid.gd" type="Script" id=7]
+[ext_resource path="res://building_generator/outside_walls/grid_data.gd" type="Script" id=8]
+[ext_resource path="res://building_generator/outside_walls/actions/get_random_point.gd" type="Script" id=9]
+[ext_resource path="res://building_generator/outside_walls/actions/test_point_inside.gd" type="Script" id=10]
+[ext_resource path="res://building_generator/outside_walls/actions/test_point_walls_distance.gd" type="Script" id=11]
 
 [node name="outside_walls" type="Node2D"]
 script = ExtResource( 1 )
@@ -53,4 +58,21 @@ window = true
 max_area = 2000.0
 probability = 20.0
 window = true
+
+[node name="grid_view" type="Node2D" parent="."]
+script = ExtResource( 7 )
+
+[node name="grid" type="Node" parent="."]
+script = ExtResource( 8 )
+
+[node name="actions" type="Node" parent="."]
+
+[node name="get_random_point" type="Node" parent="actions"]
+script = ExtResource( 9 )
+
+[node name="test_point_inside" type="Node" parent="actions"]
+script = ExtResource( 10 )
+
+[node name="test_point_walls_distance" type="Node" parent="actions"]
+script = ExtResource( 11 )
 
