@@ -82,7 +82,7 @@ func _ready():
 	$grid.walls = self
 	
 	print(aabb)
-	budget = 50.0
+	budget = 30.0
 	for k in range(shape.segments.size()):
 		var segment = [shape.segments[k], shape.segments[(k + 1) % shape.segments.size()]]
 		var seg_shape = SegmentShape2D.new()

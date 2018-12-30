@@ -12,13 +12,13 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
-export var move_offset = 0.07
+var move_offset = 0.2
 enum {GROW, COMPLETE}
 var state = GROW
 func run(obj):
+	return "next"
 	var tris = obj.tris
 	if state == GROW:
-		if obj.rnd.randf() < obj.grow_probability:
 			var poly = []
 			var segs = obj.shape.segments
 			for p in segs:
@@ -27,9 +27,17 @@ func run(obj):
 			for p in range(segs.size()):
 				var seg = [segs[p], segs[(p + 1) % segs.size()]]
 				var seg_vec = seg[1] - seg[0]
-				var seg_n = seg_vec.normalized().tangent()
-				seg[0] += seg_n * move_offset
-				seg[1] += seg_n * move_offset
+				var seg_dir = seg_vec.normalized()
+				#seg[0] += seg_dir * move_offset
+				var next = segs[(p + 2) % segs.size()]
+				var seg_vec2 = next - seg[1]
+				var seg_dir2 = seg_vec2.normalized()
+				var angle = seg_dir.angle_to(seg_dir2)
+				if abs(angle) < PI / 2.0:
+#					seg[1] -= seg_dir * move_offset
+					pass
+				elif abs(angle) > PI / 2.0 + 0.2 && abs(angle) < 3.0 * PI / 2.0:
+					seg[1] += seg_dir * move_offset
 				if !obj.outside_walls_obj.inside_walls(seg[0], obj.global_transform):
 					continue
 				elif !obj.outside_walls_obj.inside_walls(seg[1], obj.global_transform):

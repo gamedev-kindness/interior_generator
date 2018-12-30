@@ -11,6 +11,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+var last_dec = 0
 func run(obj):
 	var complete = true
 	for k in get_tree().get_nodes_in_group("zones"):
@@ -22,13 +23,19 @@ func run(obj):
 		for k in get_tree().get_nodes_in_group("zones"):
 			k.align_to_grid()
 		return "next"
-#	else:
-#		var count = 0
-#		var states = []
-#		for k in get_tree().get_nodes_in_group("zones"):
-#			if k.complete == false:
-#				count += 1
-#				states.push_back(k.state)
-#		if states.size() < 20:
-#			print(OS.get_datetime(), " ", count, " ", states)
-				
+	else:
+		var count = 0
+		var states = []
+		for k in get_tree().get_nodes_in_group("zones"):
+			if k.complete == false:
+				count += 1
+				states.push_back(k.state)
+		if last_dec < count:
+			print(OS.get_datetime(), " ", count, " ", states)
+			last_dec = count
+		elif last_dec > count && count < 30:
+			print(OS.get_datetime(), " ", count, " ", states)
+			last_dec = count
+		else:
+			print(OS.get_datetime(), " ", count, " ", states)
+			last_dec = count

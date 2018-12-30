@@ -21,7 +21,6 @@ polygon = PoolVector2Array( -73.4693, -48.3211, -50.7533, -64.5578, -50.3582, -3
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 0, -12 )
-current = true
 zoom = Vector2( 0.1, 0.1 )
 
 [node name="states" type="Node" parent="."]

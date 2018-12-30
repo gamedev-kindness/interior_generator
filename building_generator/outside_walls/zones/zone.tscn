@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://building_generator/outside_walls/zones/zone.gd" type="Script" id=1]
 [ext_resource path="res://building_generator/outside_walls/zones/states/init.gd" type="Script" id=2]
@@ -9,7 +9,8 @@
 [ext_resource path="res://building_generator/outside_walls/zones/states/grow_rect.gd" type="Script" id=7]
 [ext_resource path="res://building_generator/outside_walls/zones/states/grow_sides.gd" type="Script" id=8]
 [ext_resource path="res://building_generator/outside_walls/zones/states/grow_segments.gd" type="Script" id=9]
-[ext_resource path="res://building_generator/outside_walls/zones/states/shrink_uniform.gd" type="Script" id=10]
+[ext_resource path="res://building_generator/outside_walls/zones/states/grow_segments_size.gd" type="Script" id=10]
+[ext_resource path="res://building_generator/outside_walls/zones/states/shrink_uniform.gd" type="Script" id=11]
 
 [node name="zone" type="Node2D"]
 script = ExtResource( 1 )
@@ -46,7 +47,10 @@ script = ExtResource( 9 )
 single = true
 move_offset = 0.1
 
-[node name="shrink_uniform2" type="Node" parent="states"]
+[node name="grow_segments_size" type="Node" parent="states"]
 script = ExtResource( 10 )
+
+[node name="shrink_uniform2" type="Node" parent="states"]
+script = ExtResource( 11 )
 amount = 0.1
 

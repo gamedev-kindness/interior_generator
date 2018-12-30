@@ -33,9 +33,11 @@ func update_shape_grid():
 		var p2 = global_transform.xform(shape.segments[(h + 1) % shape.segments.size()])
 		var vec = (p2 - p1).normalized()
 		var p = p1
-		grid.plot(p, area_id)
-		while p.distance_to(p2) > step:
+		if grid.getpixel(p) != 1:
 			grid.plot(p, area_id)
+		while p.distance_to(p2) > step:
+			if grid.getpixel(p) != 1:
+				grid.plot(p, area_id)
 			p += vec * step
 
 
@@ -71,10 +73,12 @@ var state = 0
 func all_done(obj):
 	pass
 func align_to_grid():
+	update_shape_grid()
 	for h in range(shape.segments.size()):
-		var p = global_transform.xform(shape.segments[h])
+		var op = shape.segments[h]
+		var p = global_transform.xform(op)
 		if grid.getpixel(p) == area_id:
-			var up =  grid.align(p)
+			var up =  grid.align(p, false, false)
 			var np = global_transform.xform_inv(up)
 			shape.segments[h] = np
 	update_shape()
@@ -98,6 +102,7 @@ func _process(delta):
 			state += 1
 			states[state].init(self)
 		else:
+			print("complete")
 			can_run = false
 			complete = true
 			emit_signal("complete", self)
