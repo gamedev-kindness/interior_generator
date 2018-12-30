@@ -19,13 +19,13 @@ func run(obj):
 		var p2 = segdata[(h + 1) % segdata.size()]
 		segs.push_back([p1, p2])
 		print(p1)
-		obj.grid.plot(obj, p1, 1)
+		obj.grid.plot(p1, 1)
 		var step = min(obj.stepx, obj.stepy)
 		var l = (p2 - p1).length()
 		var p = p1
 		while p.distance_to(p2) > step:
 			p = p.linear_interpolate(p2, step / l)
-			obj.grid.plot(obj, p, 1)
+			obj.grid.plot(p, 1)
 	return "next"
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

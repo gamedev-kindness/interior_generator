@@ -15,7 +15,8 @@ export var amount = 0.07
 enum {SHRINK, COMPLETE}
 var state = SHRINK
 func run(obj):
-	var tris = obj.tris
+#	var tris = obj.tris
+	return "next"
 	if state == SHRINK:
 		if obj.rnd.randf() < obj.grow_probability:
 			var poly = []
@@ -30,7 +31,7 @@ func run(obj):
 				obj.update_shape()
 				state = COMPLETE
 	elif state == COMPLETE:
-#		state = SHRINK
+		state = SHRINK
 		return "next"
 
 func init(obj):

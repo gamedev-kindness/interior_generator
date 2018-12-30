@@ -11,10 +11,11 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
-export var amount = 0.15
 enum {GROW, COMPLETE}
 var state = GROW
+
 func run(obj):
+	return "next"
 	if state == GROW:
 		if obj.rnd.randf() < obj.grow_probability:
 			var poly = []
@@ -23,14 +24,18 @@ func run(obj):
 				if max_length < k.length():
 					max_length = k.length()
 			for k in obj.shape.segments:
-				poly.push_back(k * (max_length + amount) / max_length)
-			if check_polygon(obj, poly, obj.global_transform):
-				obj.shape.segments = poly
-				obj.update_shape()
-			else:
-				state = COMPLETE
+#				poly.push_back(k * (max_length + min(obj.stepx, obj.stepy)) / max_length)
+				var tk = obj.global_transform.xform(k)
+				var uptk = Vector2(ceil(k.x / obj.stepx) * obj.stepx, ceil(k.y / obj.stepy) * obj.stepy)
+				var ntk = obj.global_transform.xform_inv(uptk)
+				poly.push_back(ntk)
+#			if check_polygon_grid(obj, poly, obj.global_transform):
+			obj.shape.segments = poly
+			obj.update_shape()
+#			obj.update_shape_grid()
+#			else:
+			state = COMPLETE
 	elif state == COMPLETE:
-		return "next"
-
+		return
 func init(obj):
 	state = GROW

@@ -2,6 +2,7 @@ extends Node2D
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
+signal complete
 var shape
 var tris
 var circle_shape
@@ -16,7 +17,28 @@ var probability = 0.0
 var grow_probability = 0.0
 var min_area = 0.0
 var max_area = 0.0
+var stepx = 0.0
+var stepy = 0.0
+var grid
 var area_id
+var complete = false
+
+func report_spawned():
+	outside_walls_obj.emit_signal("spawned", self, area_id, 4.0)
+
+func update_shape_grid():
+	var step:float = min(stepx, stepy) / 2.0
+	for h in range(shape.segments.size()):
+		var p1 = global_transform.xform(shape.segments[h])
+		var p2 = global_transform.xform(shape.segments[(h + 1) % shape.segments.size()])
+		var vec = (p2 - p1).normalized()
+		var p = p1
+		grid.plot(p, area_id)
+		while p.distance_to(p2) > step:
+			grid.plot(p, area_id)
+			p += vec * step
+
+
 func update_shape():
 	$poly.polygon = shape.segments
 	tris = Geometry.triangulate_polygon(shape.segments)
@@ -46,6 +68,17 @@ func collide(shape, xform):
 
 var state = 0
 # Called when the node enters the scene tree for the first time.
+func all_done(obj):
+	pass
+func align_to_grid():
+	for h in range(shape.segments.size()):
+		var p = global_transform.xform(shape.segments[h])
+		if grid.getpixel(p) == area_id:
+			var up =  grid.align(p)
+			var np = global_transform.xform_inv(up)
+			shape.segments[h] = np
+	update_shape()
+		
 func _ready():
 	add_to_group("zones")
 	if shape == null:
@@ -54,6 +87,7 @@ func _ready():
 		update_shape()
 	var states = $states.get_children()
 	states[state].init(self)
+	connect("complete", self, "all_done")
 func _process(delta):
 	if !can_run:
 		return
@@ -63,6 +97,10 @@ func _process(delta):
 		if state < states.size() - 1:
 			state += 1
 			states[state].init(self)
+		else:
+			can_run = false
+			complete = true
+			emit_signal("complete", self)
 	elif next == "prev":
 		if state > 0:
 			state -= 1

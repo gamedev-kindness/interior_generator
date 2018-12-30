@@ -77,4 +77,45 @@ func check_segment(obj: Node2D, poly: PoolVector2Array, xform: Transform2D) -> b
 	shape.a = poly[0]
 	shape.b = poly[1]
 	return check_convex_shape(obj, shape, xform)
-
+func check_polygon_grid(obj: Node2D, poly: PoolVector2Array, xform: Transform2D) -> bool:
+	var ok:bool = true
+	var step:float = min(obj.stepx, obj.stepy) / 4.0
+	for h in poly.size():
+		var p1 = xform.xform(poly[h])
+		var p2 = xform.xform(poly[(h + 1) % poly.size()])
+		var vec = (p2 - p1).normalized()
+		var p = p1
+		while p.distance_to(p2) > step:
+			if obj.grid.getpixel(p) != 0 && obj.grid.getpixel(p) != obj.area_id:
+				ok = false
+				break
+			p += vec * step
+		if !ok:
+			break
+	return ok
+func check_segment_grid(obj: Node2D, poly: PoolVector2Array, xform: Transform2D) -> bool:
+	var ok:bool = true
+	var p1 = xform.xform(poly[0])
+	var p2 = xform.xform(poly[1])
+	var vec = (p2 - p1).normalized()
+	var step:float = min(obj.stepx, obj.stepy) / 4.0
+	var p = p1
+	while p.distance_to(p2) > step:
+		if obj.grid.getpixel(p) != 0 && obj.grid.getpixel(p) != obj.area_id:
+			ok = false
+			break
+		p += vec * step
+	return ok
+func check_segment_grid_same_area_or_walls(obj: Node2D, poly: PoolVector2Array, xform: Transform2D) -> bool:
+	var ok:bool = true
+	var p1 = xform.xform(poly[0])
+	var p2 = xform.xform(poly[1])
+	var vec = (p2 - p1).normalized()
+	var step:float = min(obj.stepx, obj.stepy) / 4.0
+	var p = p1
+	while p.distance_to(p2) > step:
+		if !obj.grid.getpixel(p) in [0, 1, obj.area_id]:
+			ok = false
+			break
+		p += vec * step
+	return ok

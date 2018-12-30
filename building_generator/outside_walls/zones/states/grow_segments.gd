@@ -16,6 +16,7 @@ export var move_offset = 0.07
 enum {GROW, COMPLETE}
 var state = GROW
 func run(obj):
+	return "next"
 	var tris = obj.tris
 	if state == GROW:
 		if obj.rnd.randf() < obj.grow_probability:
@@ -32,9 +33,11 @@ func run(obj):
 				seg[1] += seg_n * move_offset
 				if !obj.outside_walls_obj.inside_walls(seg[0], obj.global_transform):
 					continue
-				if !obj.outside_walls_obj.inside_walls(seg[1], obj.global_transform):
+				elif !obj.outside_walls_obj.inside_walls(seg[1], obj.global_transform):
 					continue
-				if check_segment(obj, seg, obj.global_transform):
+				elif !check_segment(obj, seg, obj.global_transform):
+					continue
+				elif check_segment_grid_same_area_or_walls(obj, seg, obj.global_transform):
 					poly[p] = seg[0]
 					poly[(p + 1) % poly.size()] = seg[1]
 					bad = false

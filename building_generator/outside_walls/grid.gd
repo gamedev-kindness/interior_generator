@@ -29,3 +29,5 @@ func _draw():
 #			print("dawg ", grect.size)
 			if d == 1:
 				draw_rect(grect, Color(0, 0, 0, 0.5), true)
+			elif d != 0:
+				draw_rect(grect, Color((float(d) + 10.0)/ 255.0, 0.3, 0, 0.5), true)

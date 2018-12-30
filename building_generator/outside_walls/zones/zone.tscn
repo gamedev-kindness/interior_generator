@@ -1,12 +1,15 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://building_generator/outside_walls/zones/zone.gd" type="Script" id=1]
 [ext_resource path="res://building_generator/outside_walls/zones/states/init.gd" type="Script" id=2]
-[ext_resource path="res://building_generator/outside_walls/zones/states/grow_uniform.gd" type="Script" id=3]
-[ext_resource path="res://building_generator/outside_walls/zones/states/grow_rect.gd" type="Script" id=4]
-[ext_resource path="res://building_generator/outside_walls/zones/states/grow_sides.gd" type="Script" id=5]
-[ext_resource path="res://building_generator/outside_walls/zones/states/grow_segments.gd" type="Script" id=6]
-[ext_resource path="res://building_generator/outside_walls/zones/states/shrink_uniform.gd" type="Script" id=7]
+[ext_resource path="res://building_generator/outside_walls/zones/states/grow_grid_uniform.gd" type="Script" id=3]
+[ext_resource path="res://building_generator/outside_walls/zones/states/grow_grid_rect.gd" type="Script" id=4]
+[ext_resource path="res://building_generator/outside_walls/zones/states/grow_grid_sides.gd" type="Script" id=5]
+[ext_resource path="res://building_generator/outside_walls/zones/states/grow_uniform.gd" type="Script" id=6]
+[ext_resource path="res://building_generator/outside_walls/zones/states/grow_rect.gd" type="Script" id=7]
+[ext_resource path="res://building_generator/outside_walls/zones/states/grow_sides.gd" type="Script" id=8]
+[ext_resource path="res://building_generator/outside_walls/zones/states/grow_segments.gd" type="Script" id=9]
+[ext_resource path="res://building_generator/outside_walls/zones/states/shrink_uniform.gd" type="Script" id=10]
 
 [node name="zone" type="Node2D"]
 script = ExtResource( 1 )
@@ -20,22 +23,30 @@ color = Color( 0.678431, 0.0745098, 0.0745098, 1 )
 [node name="init" type="Node" parent="states"]
 script = ExtResource( 2 )
 
-[node name="grow_uniform" type="Node" parent="states"]
+[node name="grow_grid_uniform" type="Node" parent="states"]
 script = ExtResource( 3 )
-amount = 0.4
 
-[node name="grow_rect" type="Node" parent="states"]
+[node name="grow_grid_rect" type="Node" parent="states"]
 script = ExtResource( 4 )
-amount = 0.35
 
-[node name="grow_sides" type="Node" parent="states"]
+[node name="grow_grid_sides" type="Node" parent="states"]
 script = ExtResource( 5 )
-amount = 0.25
 
-[node name="grow_segments" type="Node" parent="states"]
+[node name="grow_uniform" type="Node" parent="states"]
 script = ExtResource( 6 )
 
-[node name="shrink_uniform2" type="Node" parent="states"]
+[node name="grow_rect" type="Node" parent="states"]
 script = ExtResource( 7 )
-amount = 0.2
+
+[node name="grow_sides" type="Node" parent="states"]
+script = ExtResource( 8 )
+
+[node name="grow_segments" type="Node" parent="states"]
+script = ExtResource( 9 )
+single = true
+move_offset = 0.1
+
+[node name="shrink_uniform2" type="Node" parent="states"]
+script = ExtResource( 10 )
+amount = 0.1
 

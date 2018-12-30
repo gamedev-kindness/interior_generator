@@ -12,7 +12,13 @@ func _ready():
 #func _process(delta):
 #	pass
 func run(obj):
-	return
-#	return "next"
+	if !check_polygon_grid(obj, obj.shape.segments, obj.global_transform):
+		obj.queue_free()
+	elif obj.outside_walls_obj.budget < 4:
+		obj.queue_free()
+	else:
+		obj.update_shape_grid()
+		obj.report_spawned()
+		return "next"
 func init(obj):
 	pass
