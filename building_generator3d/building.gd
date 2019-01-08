@@ -9,11 +9,33 @@ onready var walls = $"3dpart/combiner/walls"
 onready var combiner = $"3dpart/combiner"
 var pv = []
 var rpv = []
+var grid: PoolIntArray
+var rect
+var grid_cell_size:int = 4
+var grid_x:int = 0
+var grid_y:int = 0
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
 
 # Called when the node enters the scene tree for the first time.
+func inside_walls(rv: Vector2, xform: Transform2D) -> bool:
+	var pt = Geometry.triangulate_polygon(rpv)
+	var inside = false
+	for h in range(0, pt.size(), 3):
+		if Geometry.point_is_inside_triangle(xform.xform(rv), rpv[pt[h]], rpv[pt[h + 1]], rpv[pt[h + 2]]):
+			inside = true
+			break
+	return inside
+
+func grid2p(x:int, y:int) -> Vector2:
+	return Vector2(float(x * grid_cell_size) + float(grid_cell_size) / 2.0, float(y * grid_cell_size) + float(grid_cell_size) / 2.0)
+func get_grid(p: Vector2) -> int:
+	var r = p - Vector2(float(grid_cell_size) / 2.0, float(grid_cell_size) / 2.0)
+	var x = int(r.x / grid_cell_size)
+	var y = int(r.y / grid_cell_size)
+	return grid[y * grid_y + x]
+
 func _ready():
 	for k in range(poly.size()):
 		var p1 = poly[k]
@@ -28,6 +50,26 @@ func _ready():
 		rpv.push_back(poly_xform.xform(poly[k]))
 	walls.polygon = pv
 	walls.depth = floor_height
+	rect = Rect2()
+	for k in rpv:
+		rect = rect.expand(k)
+	print(rect.size)
+	grid_x = int(floor(rect.size.x / grid_cell_size) + 2)
+	grid_y = int(floor(rect.size.y / grid_cell_size) + 2)
+	print(grid_x, " ", grid_y)
+	grid = PoolIntArray()
+	grid.resize(grid_x * grid_y)
+	for gh in range(grid_y):
+		for gw in range(grid_x):
+			if inside_walls(grid2p(gw, gh), Transform2D()):
+				grid[gh * grid_y + gw] = 0
+			else:
+				grid[gh * grid_y + gw] = 1
+	print(grid)
+	print(grid.size())
+	for p in range(grid.size()):
+		if !grid[p] in [0, 1]:
+			print("!", p)
 ### windows
 	for p in range(rpv.size()):
 		var p1 = rpv[p]

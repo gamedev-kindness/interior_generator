@@ -20,4 +20,4 @@ _global_script_class_icons={
 
 [application]
 
-run/main_scene="res://3d/building.tscn"
+run/main_scene="res://building_generator3d/building.tscn"
