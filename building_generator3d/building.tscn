@@ -1,24 +1,26 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://building_generator3d/building.gd" type="Script" id=1]
-[ext_resource path="res://building_generator3d/view_cam.gd" type="Script" id=2]
+[ext_resource path="res://building_generator3d/building.tres" type="CubeMesh" id=2]
+[ext_resource path="res://building_generator3d/room.tscn" type="PackedScene" id=3]
+[ext_resource path="res://building_generator3d/view_cam.gd" type="Script" id=4]
 
-[sub_resource type="ProceduralSky" id=2]
+[sub_resource type="ProceduralSky" id=1]
 
 
-[sub_resource type="Environment" id=3]
+[sub_resource type="Environment" id=2]
 
 background_mode = 2
-background_sky = SubResource( 2 )
+background_sky = SubResource( 1 )
 
-[sub_resource type="SpatialMaterial" id=4]
+[sub_resource type="SpatialMaterial" id=3]
 
 flags_transparent = true
 albedo_color = Color( 0.917647, 0.0313726, 0.0313726, 0.760784 )
 
-[sub_resource type="CubeMesh" id=5]
+[sub_resource type="CubeMesh" id=4]
 
-material = SubResource( 4 )
+material = SubResource( 3 )
 size = Vector3( 300, 0.05, 300 )
 subdivide_width = 8
 subdivide_height = 1
@@ -26,6 +28,10 @@ subdivide_depth = 8
 
 [node name="root" type="Spatial"]
 script = ExtResource( 1 )
+floor_height = 2.7
+window_mesh = ExtResource( 2 )
+window_spacing = 1.2
+room = ExtResource( 3 )
 
 [node name="Viewport" type="Viewport" parent="."]
 
@@ -45,12 +51,12 @@ depth = 2.5
 
 [node name="view_cam" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 10, 0 )
-environment = SubResource( 3 )
+environment = SubResource( 2 )
 current = true
 far = 800.0
-script = ExtResource( 2 )
+script = ExtResource( 4 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
-mesh = SubResource( 5 )
+mesh = SubResource( 4 )
 material/0 = null
 

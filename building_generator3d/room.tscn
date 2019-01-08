@@ -1,0 +1,10 @@
+[gd_scene format=2]
+
+[node name="room" type="CSGCombiner"]
+
+[node name="CSGBox" type="CSGBox" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0 )
+width = 0.8
+height = 3.0
+depth = 0.8
+
