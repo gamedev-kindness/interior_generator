@@ -1,0 +1,63 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://3d/building.gd" type="Script" id=1]
+[ext_resource path="res://3d/view_cam.gd" type="Script" id=2]
+
+[sub_resource type="CubeMesh" id=5]
+
+size = Vector3( 0.8, 1.4, 0.3 )
+
+[sub_resource type="ProceduralSky" id=1]
+
+
+[sub_resource type="Environment" id=2]
+
+background_mode = 2
+background_sky = SubResource( 1 )
+
+[sub_resource type="SpatialMaterial" id=3]
+
+flags_transparent = true
+albedo_color = Color( 0.917647, 0.0313726, 0.0313726, 0.760784 )
+
+[sub_resource type="CubeMesh" id=4]
+
+material = SubResource( 3 )
+size = Vector3( 300, 0.05, 300 )
+subdivide_width = 8
+subdivide_height = 1
+subdivide_depth = 8
+
+[node name="root" type="Spatial"]
+script = ExtResource( 1 )
+floor_height = 2.7
+window_mesh = SubResource( 5 )
+window_spacing = 1.2
+
+[node name="Viewport" type="Viewport" parent="."]
+
+[node name="2dpart" type="Node2D" parent="Viewport"]
+
+[node name="poly" type="Polygon2D" parent="Viewport/2dpart"]
+polygon = PoolVector2Array( -14.4073, -19.1244, -5.71593, -19.1244, -6.30853, -8.06263, 6.92603, -7.47003, 6.13591, -29.396, 18.7779, -29.5935, 20.1606, -11.4207, 29.4445, -11.4207, 30.2347, 6.94972, 19.7655, 6.75219, 19.3705, 16.4312, 2.1853, 16.2337, 1.5927, 8.1349, -14.8024, 7.14725, -21.9135, 8.1349, -22.111, -2.72929, -14.6048, -2.1367 )
+
+[node name="3dpart" type="Spatial" parent="."]
+
+[node name="combiner" type="CSGCombiner" parent="3dpart"]
+operation = 2
+
+[node name="walls" type="CSGPolygon" parent="3dpart/combiner"]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0 )
+depth = 2.5
+
+[node name="view_cam" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 10, 0 )
+environment = SubResource( 2 )
+current = true
+far = 800.0
+script = ExtResource( 2 )
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = SubResource( 4 )
+material/0 = null
+
