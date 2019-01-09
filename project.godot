@@ -13,9 +13,15 @@ _global_script_classes=[ {
 "class": "ZoneState",
 "language": "GDScript",
 "path": "res://building_generator/outside_walls/zones/states/zone_script.gd"
+}, {
+"base": "Spatial",
+"class": "floor_root",
+"language": "GDScript",
+"path": "res://building_generator3d/building.gd"
 } ]
 _global_script_class_icons={
-"ZoneState": ""
+"ZoneState": "",
+"floor_root": ""
 }
 
 [application]
