@@ -32,6 +32,30 @@ func inside_walls(rv: Vector2, xform: Transform2D) -> bool:
 			break
 	return inside
 
+func point_in_concave(p: Vector2, poly: PoolVector2Array) -> bool:
+	var tris = Geometry.triangulate_polygon(poly)
+	var ok = false
+	for t in range(0, tris.size(), 3):
+		var pt1 = poly[tris[t]]
+		var pt2 = poly[tris[t + 1]]
+		var pt3 = poly[tris[t + 2]]
+		if Geometry.point_is_inside_triangle(p, pt1, pt2, pt3):
+			ok = true
+			break
+	return ok
+
+#func validate_room(poly, xform):
+#	var pdata = []
+#	for h in poly:
+#		pdata.push_back(xform.xform(h))
+#	var tris = Geometry.triangulate_polygon(pdata)
+#	var ok = true
+#	for py in range(grid_y):
+#		for px in range(grid_x):
+#			for t in range(0, tris.size(), 3):
+#				var p = Vector2(px * grid_cell_size + rect.position.x, py * grid_cell_size + rect.position.y)
+#				if Geometry.point_is_inside_triangle(p, pdata[tris[t]], pdata[tris]
+
 func grid2p(x:int, y:int) -> Vector2:
 	return Vector2(float(x * grid_cell_size) + float(grid_cell_size) / 2.0, float(y * grid_cell_size) + float(grid_cell_size) / 2.0) + rect.position
 

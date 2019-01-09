@@ -4,13 +4,47 @@ var amount = 1.6
 var obj: floor_root
 var can_grow = false
 var room_id = 2
+var concave_shapes = []
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
 
 # Called when the node enters the scene tree for the first time.
+func get_trans2d() -> Transform2D:
+	var pos = Vector2(translation.x, translation.z)
+	var rot = -rotation.y
+	return Transform2D(rot, pos)
+
+func build_convex_shapes():
+	concave_shapes.clear()
+	var poly = $poly.polygon
+	var tris = Geometry.triangulate_polygon(poly)
+	for h in range(0, tris.size(), 3):
+		var shape = ConvexPolygonShape2D.new()
+		var p1 = poly[tris[h]]
+		var p2 = poly[tris[h + 1]]
+		var p3 = poly[tris[h + 2]]
+		var points = [p1, p2, p3]
+		shape.points = points
+		concave_shapes.push_back(shape)
+
+func check_shape(shape: Shape2D, xform: Transform2D) -> bool:
+	for h in concave_shapes:
+		if shape.collide(xform, h, get_trans2d()):
+			return true
+	return false
+
+func check_shapes() -> bool:
+	for r in get_tree().get_nodes_in_group("rooms"):
+		if r == self:
+			continue
+		for h in concave_shapes:
+			if r.check_shape(h, get_trans2d()):
+				return true
+	return false
+
 func _ready():
-	pass
+	build_convex_shapes()
 
 #func grow(obj: floor_root):
 #	pass
@@ -91,8 +125,9 @@ func _process(delta):
 				updated = true
 			10:
 				can_grow = false
-		if updated && check_inside_walls(poly):
+		if updated && check_inside_walls(poly) && !check_shapes():
 			$poly.polygon = poly
 			update_grid(poly)
+			build_convex_shapes()
 		else:
 			state = state + 1
