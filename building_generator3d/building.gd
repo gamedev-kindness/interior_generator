@@ -32,6 +32,14 @@ func inside_walls(rv: Vector2, xform: Transform2D) -> bool:
 			break
 	return inside
 
+func poly_inside_walls(p: PoolVector2Array, xform: Transform2D) -> bool:
+	var ok = true
+	for pt in p:
+		if !inside_walls(pt, xform):
+			ok = false
+			break
+	return ok
+
 func point_in_concave(p: Vector2, poly: PoolVector2Array) -> bool:
 	var tris = Geometry.triangulate_polygon(poly)
 	var ok = false
@@ -43,6 +51,16 @@ func point_in_concave(p: Vector2, poly: PoolVector2Array) -> bool:
 			ok = true
 			break
 	return ok
+func walls_intersect_segments(poly: PoolVector2Array, xform: Transform2D) -> bool:
+	for h in range(poly.size()):
+		for r in range(rpv.size()):
+			var hp1 = xform.xform(poly[h])
+			var hp2 = xform.xform(poly[(h + 1) % poly.size()])
+			var rp1 = rpv[r]
+			var rp2 = rpv[(r + 1) % poly.size()]
+			if Geometry.segment_intersects_segment_2d(hp1, hp2, rp1, rp2) != null:
+				return true
+	return false
 
 #func validate_room(poly, xform):
 #	var pdata = []

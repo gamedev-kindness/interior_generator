@@ -10,12 +10,15 @@ func _ready():
 func init(obj: floor_root):
 	for w in get_tree().get_nodes_in_group("rooms"):
 		w.can_grow = true
-	print("grow")
 func run(obj: floor_root, delta: float):
-	pass
+	for w in get_tree().get_nodes_in_group("rooms"):
+		if w.can_grow:
+			return
+	return "next"
 func exit(obj: floor_root):
 	for w in get_tree().get_nodes_in_group("rooms"):
 		w.can_grow = false
+	print("grow done")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

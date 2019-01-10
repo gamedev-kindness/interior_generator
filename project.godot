@@ -26,4 +26,4 @@ _global_script_class_icons={
 
 [application]
 
-run/main_scene="res://building_generator3d/building.tscn"
+run/main_scene="res://room_grow_test/room_growth_test.tscn"
