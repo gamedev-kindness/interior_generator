@@ -44,3 +44,10 @@ func _draw():
 				wpoints.push_back((f.transform.xform(pt) - prect.position - poffset) * scale + offset)
 				wcolors.push_back(Color(0, 0, 0.5))
 			draw_polygon(PoolVector2Array(wpoints), PoolColorArray(wcolors))
+		for f in get_tree().get_nodes_in_group("rooms"):
+			var rpoints = []
+			var rcolors = []
+			for pt in f.polygon:
+				rpoints.push_back((f.transform.xform(pt) - prect.position - poffset) * scale + offset)
+				rcolors.push_back(Color(0.5, 1.0, 0.5))
+			draw_polygon(PoolVector2Array(rpoints), PoolColorArray(rcolors))

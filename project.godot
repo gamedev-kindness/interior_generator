@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Resource",
+"class": "QuadtreeData",
+"language": "GDScript",
+"path": "res://room_grow_test/quadtree/quadtree_item.gd"
+}, {
 "base": "Node",
 "class": "ZoneState",
 "language": "GDScript",
@@ -20,6 +25,7 @@ _global_script_classes=[ {
 "path": "res://building_generator3d/building.gd"
 } ]
 _global_script_class_icons={
+"QuadtreeData": "",
 "ZoneState": "",
 "floor_root": ""
 }

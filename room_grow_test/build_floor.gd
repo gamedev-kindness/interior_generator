@@ -7,8 +7,12 @@ signal windows_ready
 # var b = "text"
 
 export(Array, PackedScene) var windows = []
+export(Array, PackedScene) var rooms = []
 
 var window_spacing = 1.2
+var max_rooms = 100
+var min_rooms = 30
+var max_time = 10.0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -35,7 +39,6 @@ func init(poly: PoolVector2Array, xform: Transform2D):
 	for r in get_children():
 		if r.has_method("init"):
 			r.init(poly, rnd)
-	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 var state = 0
@@ -58,6 +61,15 @@ func build_windows():
 			w.transform = tw
 			w.add_to_group("windows")
 			print($windows.get_child_count())
+func spawn_room(point: Vector2):
+	var room = rooms[rnd.randi() % rooms.size()]
+	var r = room.instance()
+	$rooms.add_child(r)
+	var tw = Transform2D(0, point)
+	r.transform = tw
+	r.add_to_group("rooms")
+	r.hide()
+var build_time = 0.0
 func _process(delta):
 	if !polygon:
 		return
@@ -76,3 +88,15 @@ func _process(delta):
 		if $spawn_check.check(point):
 			if $point_grid.add_point(point):
 				emit_signal("spawn_point", point)
+				spawn_room(point)
+		var current_room_count = get_tree().get_nodes_in_group("rooms").size()
+		if current_room_count > max_rooms:
+			state = state + 1
+		else:
+			build_time += delta
+			if build_time > max_time && current_room_count > min_rooms:
+				state = state + 1
+			elif build_time > max_time * 3:
+				state = state + 1
+	elif state == 2:
+		$grow_rooms.grow_rooms()

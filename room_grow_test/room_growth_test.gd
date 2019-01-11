@@ -19,3 +19,6 @@ func _ready():
 	$build_floor.init(poly, transform)
 	$build_floor.connect("spawn_point", self, "process_point")
 	$build_floor.connect("windows_ready", self, "windows_ready")
+
+func _process(delta):
+	$display_data.update()

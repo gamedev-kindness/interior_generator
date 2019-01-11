@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://room_grow_test/room_growth_test.gd" type="Script" id=1]
 [ext_resource path="res://room_grow_test/display_data.gd" type="Script" id=2]
@@ -11,6 +11,8 @@
 [ext_resource path="res://room_grow_test/inside_walls.gd" type="Script" id=9]
 [ext_resource path="res://room_grow_test/walls_distance.gd" type="Script" id=10]
 [ext_resource path="res://room_grow_test/point_grid.gd" type="Script" id=11]
+[ext_resource path="res://room_grow_test/grow_rooms.gd" type="Script" id=12]
+[ext_resource path="res://room_grow_test/quadtree.gd" type="Script" id=13]
 
 [node name="room_growth_test" type="Node2D"]
 script = ExtResource( 1 )
@@ -25,8 +27,11 @@ script = ExtResource( 2 )
 [node name="build_floor" type="Node" parent="."]
 script = ExtResource( 3 )
 windows = [ ExtResource( 4 ) ]
+rooms = [ ExtResource( 4 ) ]
 
 [node name="windows" type="Node" parent="build_floor"]
+
+[node name="rooms" type="Node" parent="build_floor"]
 
 [node name="spawn_gen" type="Node" parent="build_floor"]
 script = ExtResource( 5 )
@@ -49,8 +54,14 @@ script = ExtResource( 10 )
 [node name="point_grid" type="Node" parent="build_floor"]
 script = ExtResource( 11 )
 
+[node name="grow_rooms" type="Node" parent="build_floor"]
+script = ExtResource( 12 )
+
+[node name="quadtree" type="Node" parent="build_floor"]
+script = ExtResource( 13 )
+
 [node name="Polygon2D" type="Polygon2D" parent="."]
 visible = false
-polygon = PoolVector2Array( -43, -45, -27, -65, 5, -65, 5, -45, 76, -45, 77, 53, 37, 45, 34, 11, -17, 8, -24, 51, -59, 46, -56, -3, -90, -7, -90, -46 )
+polygon = PoolVector2Array( -16, -30, -18, -47, 2, -47, 4, -28, 25, -28, 27, 14, 12, 14, 12, -9, -20, -8, -23, 14, -40, 11, -40, -6, -55, -8, -53, -30 )
 color = Color( 0.168627, 0.309804, 0.596078, 1 )
 
